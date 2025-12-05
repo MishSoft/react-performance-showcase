@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🚀 Project: react-performance-showcase
+This project is a small, focused demo to show how to write fast and efficient React components. It demonstrates the difference between a standard component and an optimized component by intentionally creating a common performance problem (unnecessary re-rendering).
 
-## Getting Started
+🎯 The Main Goal
+To visually prove the importance of React's optimization hooks: React.memo and useCallback.
 
-First, run the development server:
+💡 The Problem: Unnecessary Re-rendering
+In React, when a parent component updates its state (like a counter ticking), it tries to re-render all of its child components, even if the children's data hasn't changed. This wastes CPU time and slows down the app.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+In this demo:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The Parent Component (Home page) updates a counter every second.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The Basic Button is forced to re-render every second, even though it does nothing.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Visual Proof: The Basic Button flashes yellow every second.
 
-## Learn More
+❌ Basic Button (The Slow Way)
+Component: BasicButton.tsx
 
-To learn more about Next.js, take a look at the following resources:
+Problem: It is a regular React function. When the Parent updates, the Button updates.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Result: Slow performance and flashing (unnecessary work).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+✅ The Solution: Optimization Hooks
+The Optimized Button uses two techniques to tell React: "Do not re-render me unless my properties (props) actually change."
 
-## Deploy on Vercel
+1. React.memo
+This wraps the component and checks its props. If the props are the same as before, it tells React to skip the re-render.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. useCallback
+The onClick function is passed as a prop. Without useCallback, this function is new every time the Parent re-renders. useCallback makes sure the function stays the same, so React.memo works correctly.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+🚀 Optimized Button (The Fast Way)
+Component: OptimizedButton.tsx
+
+Solution: Uses React.memo to check for prop changes.
+
+Parent Usage: Uses useCallback to keep the onClick function stable.
+
+Result: Stable performance and the button does not flash.
+
+📊 How to See the Difference
+Run the Project: npm run dev or yarn dev
+
+Look at the Screen: Observe the difference between the two buttons. The Basic Button constantly changes color because it is re-rendering. The Optimized Button remains stable.
+
+Proving it with the Console (Advanced Check)
+Open the Console in your browser's DevTools.
+
+You will see:
+
+❌ Basic Button (...) Rendered! appears every second.
+
+✅ Optimized Button (...) Rendered! appears only once.
+
+This proves that the Basic Button is doing unnecessary work, and the Optimized Button is not.
+
+🛠️ Technologies Used
+Next.js (for modern React development)
+
+TypeScript (for writing safer, cleaner code)
+
+Tailwind CSS (for fast styling)
+
+Biome (Linter and Formatter for high-speed code quality)
